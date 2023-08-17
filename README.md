@@ -63,26 +63,12 @@ El token de autenticacion sera necesario para cada endpoint listado en la seccio
 
 | Método | Ruta                                       | Descripción                                      |
 |--------|--------------------------------------------|--------------------------------------------------|
-| GET    | `/mostrar-clientes`                        | Mostrar todos los clientes registrados.          |
-| GET    | `/obtener-automoviles-disponibles`         | Obtener automóviles disponibles para alquiler.   |
-| GET    | `/listar-alquileres-activos`               | Listar alquileres activos con datos de clientes. |
-| GET    | `/mostrar-reservas-pendientes`             | Mostrar reservas pendientes con datos.           |
-| GET    | `/obtener-detalles-alquiler/:id`           | Obtener detalles de alquiler por ID.             |
-| GET    | `/listar-empleados-vendedores`             | Listar empleados con cargo "Vendedor".           |
-| GET    | `/cantidad-automoviles-disponibles`        | Cantidad total de autos disponibles por sucursal.|
-| GET    | `/obtener-costo-alquiler/:id`              | Obtener costo total de un alquiler por ID.       |
-| GET    | `/listar-clientes-dni/:dni`               | Listar clientes por DNI específico.             |
-| GET    | `/automoviles-mayor-capacidad`            | Mostrar autos con capacidad mayor a 5.           |
-| GET    | `/detalles-alquiler-fecha`                | Detalles de alquiler con fecha de inicio específica. |
-| GET    | `/obtener-detalles-reserva/:id`           | Obtener detalles de reserva por ID.             |
-| GET    | `/listar-empleados-gerentes-asistentes`   | Listar empleados con cargo "Gerente" o "Asistente". |
-| GET    | `/clientes-con-alquileres`               | Obtener datos de clientes con al menos un alquiler. |
-| GET    | `/listar-automoviles-ordenados`           | Listar autos ordenados por marca y modelo.       |
-| GET    | `/cantidad-automoviles-por-sucursal`       | Cantidad total de autos por sucursal con dirección. |
-| GET    | `/cantidad-total-alquileres`             | Cantidad total de alquileres registrados.       |
-| GET    | `/automoviles-capacidad-disponible`       | Autos con capacidad 5 y disponibles.             |
-| GET    | `/cliente-por-id-reserva/:id`            | Datos del cliente de una reserva por ID.         |
-| GET    | `/alquileres-entre-fechas`               | Alquileres entre '2023-07-05' y '2023-07-10'.    |
+| GET    | `/bodegas`                        | Listar todas las bodegas ordenadas alfabéticamente          |
+| POST    | `/bodegas`         | Permite crear una bodegas.   |
+| GET    | `/productos/productos-order-total`               | listar todos los productos en orden descendente por el campo "Total". |
+| POST    | `/productos`               | Inserta un producto y a su vez asigna una cantidad inicial del mismo en la tabla inventarios en una de las bodegas por default. |
+| GET    | `/inventarios`             | Permite insertar registros en la tabla de inventarios |
+| GET    | `/traslados`           | Permite trasladar un producto de una bodega a otra |
 
 
 ## Autor

@@ -7,7 +7,7 @@ const db = await mongoDBConexion();
 const router = Router();
 
 /*
-TODO: Realizar un EndPolnt que permita Trasladar unproducto de una bodega a otra
+Realizar un EndPolnt que permita Trasladar unproducto de una bodega a otra
 • Se debe validar que la cantidad de unidades que se pretende sacar
 de una Bodega, sea posible, ya que si tengo 1O unidades en la
 Bodega A, no podré sacar de ella 20 unidades. Esta acción debe
