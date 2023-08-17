@@ -1,5 +1,9 @@
 import { Router } from 'express';
+import mongoDBConexion from "../database/mongoDBConexion.js";
+import errorsSchemasHelper from "../helpers/errorsSchemasHelper.js";
+import { trasladoSchema } from "../models/models.js";
 
+const db = await mongoDBConexion();
 const router = Router();
 
 /*
@@ -19,10 +23,34 @@ a los dos registros en inventarios:
 Bodega A = 5 unidades. Bodega B = 15 unidades. Además hacer un
 lnsert con toda la
 información en la tabla de historiales.
+
+id_bodega_origen,
+id_bodega_destino,
+id_producto,
+
 */
 
-router.post("/", (req, res) => {
-    res.json({ message: "Traslado creado" });
+router.post("/", async (req, res) => {
+    try {
+        const result = trasladoSchema.safeParse(req.body);
+        if(!result.success) return errorsSchemasHelper(result, res);
+        let resultDB = await db.collection("inventarios").find({ id_bodega: result.data.id_bodega_origen, id_producto: result.data.id_producto });
+        if (resultDB.cantidad < result.data.cantidad) return res.status(400).json({ message: "No hay suficientes unidades en la bodega origen" });
+        await db.collection("inventarios").updateOne({ id_bodega: result.data.id_bodega_origen, id_producto: result.data.id_producto }, { $inc: { cantidad: -result.data.cantidad } });
+        await db.collection("inventarios").updateOne({ id_bodega: result.data.id_bodega_destino, id_producto: result.data.id_producto }, { $inc: { cantidad: result.data.cantidad } });
+        await db.collection("historiales").insertOne({
+            id_bodega_origen: result.data.id_bodega_origen,
+            id_bodega_destino: result.data.id_bodega_destino,
+            id_producto: result.data.id_producto,
+            cantidad: result.data.cantidad,
+            created_at: new Date()
+        });
+        res.status(201).json({ message: "Traslado creado" });
+    }catch(err){
+        console.log(err);
+        res.status(500).json({ message: "Error del servidor" });
+    }
 })
+
 
 export default router;

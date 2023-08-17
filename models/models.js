@@ -109,10 +109,16 @@ const historialSchema = z.object({
     deleted_at: z.date().optional()
 })
 
+const trasladoSchema = z.object({
+    id_bodega_origen: z.number().int().positive(),
+    id_bodega_destino: z.number().int().positive(),
+    id_producto: z.number().int().positive(),    
+})
 
 export {
     bodegasSchema,
     productoSchema,
     inventarioSchema,
-    historialSchema
+    historialSchema,
+    trasladoSchema
 }
