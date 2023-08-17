@@ -21,79 +21,8 @@ lnsert con toda la
 información en la tabla de historiales.
 */
 
-
-const trasladoController = (req, res) => {
-    const idBodegaOrigen = req.body.id_bodega_origen;
-    const idBodegaDestino = req.body.id_bodega_destino;
-    const idProducto = req.body.id_producto;
-    const cantidad = req.body.cantidad;
-
-    const inventariosCollection = req.db.collection('inventarios');
-    const historialesCollection = req.db.collection('historiales');
-
-    inventariosCollection.find({ id_bodega: idBodegaOrigen, id_producto: idProducto }).toArray((err, inventarioOrigen) => {
-        if (err) {
-            console.log(err);
-            res.status(500).json({
-                message: "Error al obtener el inventario de la bodega de origen",
-                error: err
-            });
-        } else {
-            if (inventarioOrigen.length === 0 || inventarioOrigen[0].cantidad < cantidad) {
-                res.status(400).json({
-                    message: "No hay suficientes unidades en la bodega de origen para realizar el traslado"
-                });
-                return;
-            }
-
-            inventariosCollection.updateOne(
-                { id_bodega: idBodegaOrigen, id_producto: idProducto },
-                { $inc: { cantidad: -cantidad } },
-                (err, result) => {
-                    if (err) {
-                        console.log(err);
-                        res.status(500).json({
-                            message: "Error al actualizar el inventario de la bodega de origen",
-                            error: err
-                        });
-                    } else {
-                        inventariosCollection.updateOne(
-                            { id_bodega: idBodegaDestino, id_producto: idProducto },
-                            { $inc: { cantidad: cantidad } },
-                            (err, result) => {
-                                if (err) {
-                                    console.log(err);
-                                    // Revertir la actualización en la bodega de origen si ocurre un error
-                                    inventariosCollection.updateOne(
-                                        { id_bodega: idBodegaOrigen, id_producto: idProducto },
-                                        { $inc: { cantidad: cantidad } }
-                                    );
-                                    res.status(500).json({
-                                        message: "Error al actualizar el inventario de la bodega de destino",
-                                        error: err
-                                    });
-                                } else {
-                                    // Registrar en la tabla de historiales
-                                    historialesCollection.insertOne({
-                                        id_bodega_origen: idBodegaOrigen,
-                                        id_bodega_destino: idBodegaDestino,
-                                        id_producto: idProducto,
-                                        cantidad: cantidad,
-                                        fecha: new Date()
-                                    });
-                                    res.status(200).json({
-                                        message: "Traslado realizado exitosamente"
-                                    });
-                                }
-                            }
-                        );
-                    }
-                }
-            );
-        }
-    });
-};
-
-
+router.post("/", (req, res) => {
+    res.json({ message: "Traslado creado" });
+})
 
 export default router;

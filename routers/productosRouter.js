@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import mongoDBConexion from "../database/mongoDBConexion.js";
+import { productoSchema } from "../models/models.js";
+import errorsSchemasHelper from '../helpers/errorsSchemasHelper.js';
 
 const router = Router();
 const db = await mongoDBConexion()
@@ -43,9 +45,16 @@ unidades y la Bodega C tiene 3 unidades. Total= 18.
     res.json(collection)
 })
 /*
-TODO: Realizar un EndPoint que permita insertar un productos y a su vez asigne
+Realizar un EndPoint que permita insertar un productos y a su vez asigne
 una cantidad inicial del mismo en la tabla inventarios en una de las bodegas
 por default.
 */
+.post("/", async (req, res) => {
+    const result = productoSchema.safeParse(req.body);
+    if(!result.success) return errorsSchemasHelper(result, res)
+    const collection = await db.collection("productos").insertOne(result.data);
+    await db.collection("inventarios").insertOne({ id_producto: result.data.id, id_bodega: 1, cantidad: 0 });
+    res.status(201).json({ Mensaje: "Producto creado", id: collection.insertedId });
+})
 
 export default router;
