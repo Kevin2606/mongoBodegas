@@ -10,6 +10,7 @@ dotenv.config();
 const app = express();
 
 app
+.use(express.json())
 .use('/bodegas', bodegasRouter)
 .use('/productos', productosRouter)
 .use('/inventarios', inventariosRouter)
