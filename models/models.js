@@ -110,9 +110,13 @@ const historialSchema = z.object({
 })
 
 const trasladoSchema = z.object({
+    id: z.number().int().positive(),
     id_bodega_origen: z.number().int().positive(),
     id_bodega_destino: z.number().int().positive(),
-    id_producto: z.number().int().positive(),    
+    id_producto: z.number().int().positive(),
+    update_by: z.number().int().positive(),
+    cantidad: z.number().int().positive(), 
+    id_inventario: z.number().int().positive(), 
 })
 
 export {
